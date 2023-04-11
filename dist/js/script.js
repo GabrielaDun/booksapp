@@ -15,7 +15,7 @@
   };
 
   const filters = [];
-  console.log(filters);
+
 
   class BookShelf {
     constructor(){
@@ -23,11 +23,18 @@
       thisBookShelf.render();
     }
 
+    getElements(){
+      thisBookList.booksContainer = document.querySelector(select.booksList);
+      thisBookShelf.filtersContainer = document.querySelector(select.filters);
+    }
+
     render(){
       const thisBookShelf = this;
       for (let book in dataSource.books){
         const singleBook = dataSource.books[book];
-        const linkHTMLData = {name:singleBook.name, price:singleBook.price, id:singleBook.id, image:singleBook.image, rating:singleBook.rating};
+        const ratingBgc = thisBookShelf.determinateRatingBgc(singleBook.rating);
+        const ratingWidth = 10 * singleBook.rating;
+        const linkHTMLData = {ratingBgc: ratingBgc, ratingWidth: ratingWidth, name:singleBook.name, price:singleBook.price, id:singleBook.id, image:singleBook.image, rating:singleBook.rating};
         const linkHTML = templates.menuProduct(linkHTMLData);
         thisBookShelf.element = utils.createDOMFromHTML(linkHTML);
         const menuContainer = document.querySelector(select.bookList);
@@ -75,7 +82,6 @@
 
     }
     filters(){
-      const thisBookShelf = this;
       for (let book in dataSource.books){
         const singleBook = dataSource.books[book];
 
@@ -83,30 +89,38 @@
         let shouldBeHidden = false;
         for (let filter in filters){
           const singleFilter = filters[filter];
-          console.log(singleFilter);
           const details = singleBook.details[singleFilter];
-          console.log(details);
           if (details == false) {
             shouldBeHidden = true;
           }
         }
-        const details = singleBook.details;
-        console.log(details);
-        console.log(singleBook.id);
         const bookImage = document.querySelector('.book__image[data-id="' + singleBook.id + '"]');
-        console.log(bookImage);
-        console.log(shouldBeHidden);
         if (shouldBeHidden == true){
           bookImage.classList.add('hidden');
         }
         else {
           bookImage.classList.remove('hidden');
         }
-        console.log(thisBookShelf);
         
-      // przejsc po wszytskich ksiazach z datasource.books
-      // dla tych ktore nie pasuja do filtra dodac klase hidden
       }
+    }
+    determinateRatingBgc(rating){
+      const thisBookShelf = this;
+
+      thisBookShelf.ratingBgc = '';
+      if(rating < 6){
+        thisBookShelf.ratingBgc = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)';
+      }else if(rating > 6 && rating <= 8){
+        thisBookShelf.ratingBgc = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)';
+      }else if(rating > 8 && rating <= 9){
+        thisBookShelf.ratingBgc = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+      }else if(rating > 9){
+        thisBookShelf.ratingBgc = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)';
+      }
+
+      return thisBookShelf.ratingBgc;
+    
+      
     }
   }
 
