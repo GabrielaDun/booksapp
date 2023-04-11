@@ -12,9 +12,6 @@
     menuProduct: Handlebars.compile(document.querySelector(select.templateBook).innerHTML),
   };
 
-
-  console.log(templates);
-
   class BookShelf {
     constructor(){
       const thisBookShelf = this;
@@ -30,66 +27,33 @@
         thisBookShelf.element = utils.createDOMFromHTML(linkHTML);
         const menuContainer = document.querySelector(select.bookList);
         menuContainer.appendChild(thisBookShelf.element);
-        
       }
       thisBookShelf.initAction();
     }
     initAction(){
-      let favoriteBooks = [];
-      console.log(favoriteBooks);
-      const booksImages = document.querySelectorAll('.books-list .book__image');
-      console.log(booksImages);
-      for (let bookImage of booksImages){
-        console.log(bookImage);
-        bookImage.addEventListener('click', function(event){
-          event.preventDefault();
-          const imageId = bookImage.getAttribute('data-id');
-          if(!favoriteBooks.includes(imageId)){
-            bookImage.classList.add('favorite');
-            console.log(imageId);
-            favoriteBooks.push(imageId);
-            console.log(favoriteBooks);
-          }
-          else {
-            bookImage.classList.remove('favorite');
-            console.log('remove');
-            const indexOfId = favoriteBooks.indexOf(imageId);
-            console.log(indexOfId);
-            const removedValue = favoriteBooks.splice(indexOfId, 1);
-            console.log(removedValue);
-            console.log(favoriteBooks);
-          }
-        });
-      }
-    }
-
-
-
-    /*initAction(){
       const thisBookShelf = this;
       let favoriteBooks = [];
+      const booksImages = document.querySelectorAll('.books-list .book__image');
+      console.log(booksImages);
       thisBookShelf.booksContainer = document.querySelector(select.bookList);
-      console.log(thisBookShelf.bookImage);
-      for (let book in dataSource.books){
-        const singleBook = dataSource.books[book];
-        const bookId = singleBook.id;
-        console.log(singleBook);
-        console.log(bookId);
-        thisBookShelf.booksContainer.addEventListener('click', function(event){
-          const id = singleBook.id;
-          event.preventDefault();
-          favoriteBooks.push(id);
-          console.log(favoriteBooks);
-        //dodanie do tablicy. jak zminic dodanie do tablicy na dodanie klasy?
-        });
-      }
-    } */
-  }
-  // klikniecie -> nasluchiwacz na ksiazki. funkcja powinna 
-  // uruchamiac petle ktora sprawdza czy ksiazki maja
-  // kliknieie -> dodanie do tablicy favoritebooks
-  // kli
 
+      thisBookShelf.booksContainer.addEventListener('click', function(event){
+        event.preventDefault();
+        const imageId = event.target.offsetParent.getAttribute('data-id');
+        if(!favoriteBooks.includes(imageId)){
+          event.target.offsetParent.classList.add('favorite');
+          favoriteBooks.push(imageId);
+        }
+        else {
+          event.target.offsetParent.classList.remove('favorite');
+          const indexOfId = favoriteBooks.indexOf(imageId);
+          const removedValue = favoriteBooks.splice(indexOfId, 1);
+          console.log(removedValue);
+        }
+        console.log(favoriteBooks);
+      });
+    }
+  }
 
   const app = new BookShelf();
   console.log(app);
